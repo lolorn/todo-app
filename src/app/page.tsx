@@ -1,12 +1,10 @@
-import prisma from "@/lib/prisma";
+import request from "@/utils/request";
 
 export default function Home() {
-  const allUser = prisma.user.findMany();
-  
+
   return (
     <>
       <div className="text-2xl">Todo Project</div>
-      {JSON.stringify(allUser)}
     </>
   );
 }
