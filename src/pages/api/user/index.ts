@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import {
   createUser,
   deleteUser,
-  findUser,
+  // findUser,
   updateUser,
 } from "../../../../prisma/user";
 
@@ -34,10 +34,10 @@ export default async function handler(
         return res.status(201).json(deletedUser);
       }
 
-      case "GET": {
+      /* case "GET": {
         const user = await findUser(username, password, email);
         return res.status(201).json(user);
-      }
+      } */
 
       default: {
         return res.status(405).json({ error: "未知方法" });
