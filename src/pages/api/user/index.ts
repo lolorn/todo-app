@@ -19,7 +19,7 @@ export default async function handler(
         return res.status(201).json(newUser);
       }
 
-      case "UPDATE": {
+      case "PUT": {
         const updatedUser = await updateUser(
           id as string,
           username,
