@@ -19,16 +19,16 @@ export const createUser = async (
     const user = await prisma.user.create({
       data: userData,
     });
-    return { message: "创建用户成功", status: true, data: user };
+    return { message: "创建用户成功", status: "success", data: user };
   } catch (error) {
     if (error instanceof ZodError) {
       return {
-        status: false,
+        status: "failed",
         message: "创建用户失败,校验不通过",
         error: error.errors,
       };
     } else {
-      return { status: false, message: "创建用户失败", error };
+      return { status: "failed", message: "创建用户失败", error };
     }
   }
 };
@@ -46,7 +46,7 @@ export const updateUser = async (
   } = {};
   try {
     if (id === undefined) {
-      return { status: false, message: "id没有传递" };
+      return { status: "failed", message: "id没有传递" };
     }
 
     if (username !== undefined) {
@@ -66,7 +66,7 @@ export const updateUser = async (
 
     // 检查是否有传递需要更新的字段
     if (Object.keys(updateData).length === 0) {
-      return { status: false, message: "没有传递需要更新的字段" };
+      return { status: "failed", message: "没有传递需要更新的字段" };
     }
 
     const user = await prisma.user.update({
@@ -75,17 +75,17 @@ export const updateUser = async (
       },
       data: updateData,
     });
-    return { message: "更新用户成功", data: updateData };
+    return { message: "更新用户成功", status: "success", data: updateData };
   } catch (error) {
     if (error instanceof ZodError) {
       return {
-        status: false,
+        status: "failed",
         message: "更新用户失败,校验不通过",
         error: error.errors,
       };
     } else {
       return {
-        status: false,
+        status: "failed",
         message: "更新用户失败",
         error,
       };
@@ -96,16 +96,16 @@ export const updateUser = async (
 export const deleteUser = async (id: string) => {
   try {
     if (id === undefined) {
-      return { status: false, message: "id没有传递" };
+      return { status: "failed", message: "id没有传递" };
     }
     const user = await prisma.user.delete({
       where: {
         id,
       },
     });
-    return user;
+    return { status: "success", message: "删除用户成功", user };
   } catch (error) {
-    return { status: false, message: "删除用户失败", error };
+    return { status: "failed", message: "删除用户失败", error };
   }
 };
 //查找用户

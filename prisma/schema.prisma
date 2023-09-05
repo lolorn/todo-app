@@ -41,7 +41,9 @@ model Todo {
 }
 
 model Category {
-  id   Int    @id @default(autoincrement())
-  name String
-  todo Todo[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  todo      Todo[]
 }
