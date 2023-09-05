@@ -1,15 +1,49 @@
-import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
+import {
+  createUser,
+  deleteUser,
+  findUser,
+  updateUser,
+} from "../../../../prisma/user";
 
-export default async function handle(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  switch (req.method) {
-    case "GET":
-      const allUser = await prisma.user.findMany();
-      return res.status(201).json('666');
-    default:
-      return res.status(405).json({ message: '未知的请求方法,你干嘛哎吆!' });
+  const { id } = req.query;
+  const { username, password, email } = req.body;
+  try {
+    switch (req.method) {
+      case "POST": {
+        const newUser = await createUser(username, password, email);
+        return res.status(201).json(newUser);
+      }
+
+      case "UPDATE": {
+        const updatedUser = await updateUser(
+          id as string,
+          username,
+          password,
+          email
+        );
+        return res.status(201).json(updatedUser);
+      }
+
+      case "DELETE": {
+        const deletedUser = await deleteUser(id as string);
+        return res.status(201).json(deletedUser);
+      }
+
+      case "GET": {
+        const user = await findUser(username, password, email);
+        return res.status(201).json(user);
+      }
+
+      default: {
+        return res.status(405).json({ error: "未知方法" });
+      }
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
