@@ -27,3 +27,4 @@ NextJs Api Routes
 主题切换 next-themes
 icon iconify
 状态管理库 zustand
+动画 framer-motion
