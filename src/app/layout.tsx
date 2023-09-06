@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-slate-200">
+      <body className="bg-slate-200 dark:bg-slate-950">
         <main className="h-screen">
           <ThemeMode>{children}</ThemeMode>
           <Drawer />
