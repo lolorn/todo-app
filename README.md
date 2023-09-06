@@ -23,4 +23,7 @@ NextJs Api Routes
     yarn prisma generate
 ```
 ## 前端
-基础样式:Tailwindcss
+基础样式 Tailwindcss
+主题切换 next-themes
+icon iconify
+状态管理库 zustand
