@@ -31,7 +31,7 @@ function Drawer() {
               variants={variantsDrawer}
               exit={{ height: 0 }}
               className={
-                "bg-white dark:bg-black absolute z-50 left-0 right-0 rounded-t-2xl"
+                "bg-white dark:bg-neutral-900 absolute z-50 left-0 right-0 rounded-t-2xl"
               }
               onClick={(e) => e.stopPropagation()}
             >
