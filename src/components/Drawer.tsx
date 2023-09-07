@@ -35,6 +35,13 @@ function Drawer() {
               }
               onClick={(e) => e.stopPropagation()}
             >
+              <div className="flex items-center justify-between p-4">
+                <span className="w-8"></span>
+                <span className="text-2xl">设置</span>
+                <span className="text-blue-500 w-8" onClick={toggle}>
+                  完成
+                </span>
+              </div>
               {content}
             </motion.div>
           </motion.div>

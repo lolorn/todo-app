@@ -28,3 +28,4 @@ NextJs Api Routes
 icon iconify
 状态管理库 zustand
 动画 framer-motion
+数据请求 @tanstack/react-query
