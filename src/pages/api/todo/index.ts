@@ -9,6 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  
   const { id } = req.query;
   const {
     title,
@@ -19,6 +20,7 @@ export default async function handler(
     important,
     status,
     isDone,
+    configs,
   } = req.body;
   try {
     switch (req.method) {
@@ -52,6 +54,7 @@ export default async function handler(
       }
       case "GET": {
         const todos = await findTodo();
+        
         return res.status(201).json(todos);
       }
       default: {

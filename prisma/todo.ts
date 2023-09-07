@@ -225,7 +225,17 @@ export const deleteTodo = async (id: string) => {
 };
 
 //查找任务
-export const findTodo = async () => {
-  const allTodos = await prisma.todo.findMany({});
-  return { status: "success", message: "这是所有任务", allTodos };
+export const findTodo = async (config: object) => {
+  if (config === undefined) {
+    const todos = await prisma.todo.findMany();
+    return { status: "success", message: "这是所有任务", todos };
+  } else {
+    const todos = await prisma.todo.findMany(config);
+    return {
+      status: "success",
+      message: "这是根据条件查找的任务",
+      config,
+      todos,
+    };
+  }
 };

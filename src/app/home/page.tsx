@@ -1,12 +1,17 @@
 "use client";
-import { getTodo } from "@/api/getTodo";
+import { getAllTodoApi, getTodoByConfigsApi } from "@/api/getTodo";
 import { Icon } from "@iconify/react";
 import { useQuery } from "@tanstack/react-query";
 //!网格布局有问题哦
 function HomePage() {
-  const { query, isLoading, error } = useQuery({
-    queryFn: getTodo,
-    queryKey: ["getTodo"],
+  const { data, isLoading, isFetching } = useQuery({
+    queryFn: () =>
+      getTodoByConfigsApi({
+        where: {
+          id: 1,
+        },
+      }),
+    queryKey: ["getAllTodoApi"],
   });
   return (
     <div>
