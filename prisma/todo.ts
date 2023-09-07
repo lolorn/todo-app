@@ -198,7 +198,7 @@ export const updateTodo = async (
     }
   }
 };
-//删除todo
+//删除任务
 export const deleteTodo = async (id: string) => {
   try {
     if (id === undefined) {
@@ -222,4 +222,10 @@ export const deleteTodo = async (id: string) => {
       return { status: "failed", message: "删除任务失败", error };
     }
   }
+};
+
+//查找任务
+export const findTodo = async () => {
+  const allTodos = await prisma.todo.findMany({});
+  return { status: "success", message: "这是所有任务", allTodos };
 };

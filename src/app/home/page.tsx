@@ -1,8 +1,13 @@
 "use client";
+import { getTodo } from "@/api/getTodo";
 import { Icon } from "@iconify/react";
-import Drawer from "@/components/Drawer";
+import { useQuery } from "@tanstack/react-query";
 //!网格布局有问题哦
 function HomePage() {
+  const { query, isLoading, error } = useQuery({
+    queryFn: getTodo,
+    queryKey: ["getTodo"],
+  });
   return (
     <div>
       <div className="grid grid-cols-2 grid-rows-[minmax(10rem,1fr)_7rem_7rem] gap-4">
