@@ -1,66 +1,163 @@
 "use client";
+import { getAllTodoApi, getTodoByConfigsApi } from "@/api/getTodo";
+import MyDayCard from "@/components/home/MyDayCard";
 import { Icon } from "@iconify/react";
-import Drawer from "@/components/Drawer";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import TodoList from "@/components/home/TodoList";
 //!网格布局有问题哦
 function HomePage() {
+  const { data: allTodos } = useQuery({
+    queryFn: () => getAllTodoApi(),
+    queryKey: ["getAllTodos"],
+  });
+
+  const { data: doneTodos } = useQuery({
+    queryFn: () =>
+      getTodoByConfigsApi({
+        where: {
+          isDone: true,
+        },
+      }),
+    queryKey: ["getDoneTodos"],
+  });
+
+  const { data: notDoneTodos } = useQuery({
+    queryFn: () =>
+      getTodoByConfigsApi({
+        where: {
+          isDone: false,
+        },
+      }),
+    queryKey: ["getNotDoneTodos"],
+  });
+
+  const { data: importantTodos } = useQuery({
+    queryFn: () =>
+      getTodoByConfigsApi({
+        where: {
+          important: true,
+        },
+      }),
+    queryKey: ["getImportantTodos"],
+  });
+
+  const data = [
+    {
+      id: 1,
+      icon: "mingcute:inbox-fill",
+      title: "全部",
+      iconBg: "bg-black",
+      count: allTodos?.data.todos.length,
+    },
+    {
+      id: 2,
+      icon: "ph:star-bold",
+      title: "重要",
+      iconBg: "bg-amber-500",
+      count: importantTodos?.data.todos.length,
+    },
+    {
+      id: 3,
+      icon: "mingcute:check-fill",
+      title: "已完成",
+      iconBg: "bg-emerald-500",
+      count: doneTodos?.data.todos.length,
+    },
+    {
+      id: 4,
+      icon: "maki:cross",
+      title: "未完成",
+      iconBg: "bg-red-500",
+      count: notDoneTodos?.data.todos.length,
+    },
+  ];
+
+  const [selectedId, setSelectedId] = useState(0);
+
   return (
-    <div>
-      <div className="grid grid-cols-2 grid-rows-[minmax(10rem,1fr)_7rem_7rem] gap-4">
-        <div className="col-span-2 border bg-white shadow-sm h-40 rounded-2xl flex flex-col px-4 pt-2">
+    <div className="h-full grid grid-cols-2 grid-rows-[10rem_7rem_7rem_1fr] gap-4">
+      <MyDayCard />
+      {data.map((item) => (
+        <motion.div
+          key={item.id}
+          layoutId={item.id}
+          onClick={() => setSelectedId(() => item.id)}
+          whileTap={{ scale: 1.1, transition: { type: "spring" } }}
+          className=" rounded-2xl bg-white dark:bg-neutral-800  p-4 flex flex-col justify-between shadow-md"
+        >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Icon icon="ph:sun-bold" className="text-2xl text-sky-500" />
-              <div className="text-slate-500 font-medium">我的一天</div>
+            <div className={`${item.iconBg} p-1.5 rounded-full text-white`}>
+              <Icon icon={item.icon} className="text-2xl" />
             </div>
-            <div>
-              <div className="font-bold text-2xl">5</div>
-            </div>
+            <div className="font-bold text-2xl">{item.count}</div>
           </div>
-          <ul className="flex-1 flex flex-col">
-            <li className="flex-1">1</li>
-            <li className="flex-1">2</li>
-            <li className="flex-1">3</li>
-          </ul>
-        </div>
-        <div className="border rounded-2xl bg-white p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <div className="bg-black p-1.5 rounded-full text-white">
-              <Icon icon="mingcute:inbox-fill" className="text-2xl" />
-            </div>
-            <div className="font-bold text-2xl">11</div>
+          <div className="font-medium text-slate-500 dark:text-slate-300 text-sm">
+            {item.title}
           </div>
-          <div className="font-medium text-slate-500 text-sm">全部</div>
-        </div>
-        <div className="border rounded-2xl bg-white p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <div className="bg-amber-500 p-1.5 rounded-full text-white">
-              <Icon icon="ph:star-bold" className="text-2xl" />
-            </div>
-            <div className="font-bold text-2xl">0</div>
-          </div>
-          <div className="font-medium text-slate-500 text-sm">重要</div>
-        </div>
-        <div className="border rounded-2xl bg-white p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <div className="bg-emerald-500 p-1.5 rounded-full text-white">
-              <Icon icon="mingcute:check-fill" className="text-2xl" />
-            </div>
-            <div className="font-bold text-2xl">0</div>
-          </div>
-          <div className="font-medium text-slate-500 text-sm">已完成</div>
-        </div>
-        <div className="border rounded-2xl bg-white p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <div className="bg-red-500 p-1.5 rounded-full text-white">
-              <Icon icon="maki:cross" className="text-2xl" />
-            </div>
-            <div className="font-bold text-2xl">0</div>
-          </div>
-          <div className="font-medium text-slate-500 text-sm">未完成</div>
-        </div>
-      </div>
-      <div className="h-[1px] bg-gray-300 my-4" />
-      <div></div>
+        </motion.div>
+      ))}
+      <AnimatePresence initial={false}>
+        {selectedId && (
+          <motion.div
+            key={"menu1"}
+            layout
+            className="fixed z-40 top-0 left-0 right-0 bottom-0"
+            onClick={() => {
+              setSelectedId(0);
+            }}
+          >
+            <motion.div
+              key={"menu2"}
+              layout
+              style={{
+                top: 80,
+                left: 16,
+                width: "calc(100vw - 2rem)",
+              }}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "66vh", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ type: "tween" }}
+              layoutId={selectedId}
+              className="bg-white dark:bg-neutral-800 shadow-md fixed z-50 rounded-2xl p-4 flex flex-col"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <motion.div className="flex items-center justify-between">
+                <motion.div className="text-2xl font-medium">
+                  {data[selectedId - 1].title}
+                </motion.div>
+                <motion.button
+                  onClick={() => {
+                    setSelectedId(() => 0);
+                  }}
+                >
+                  <Icon icon="carbon:close-filled" className="text-2xl" />
+                </motion.button>
+              </motion.div>
+              <motion.div className="flex-1 pt-4">
+                {(() => {
+                  switch (selectedId) {
+                    case 1:
+                      return <TodoList todos={allTodos?.data.todos} />;
+                    case 2:
+                      return <TodoList todos={importantTodos?.data.todos} />;
+                    case 3:
+                      return <TodoList todos={doneTodos?.data.todos} />;
+                    case 4:
+                      return <TodoList todos={notDoneTodos?.data.todos} />;
+                    default:
+                      return null;
+                  }
+                })()}
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

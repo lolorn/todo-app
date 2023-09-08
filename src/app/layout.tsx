@@ -1,6 +1,8 @@
 import ThemeMode from "@/components/ThemeMode";
 import "./globals.css";
 import type { Metadata } from "next";
+import Drawer from "@/components/Drawer";
+import QueryMode from "@/components/QueryMode";
 
 export const metadata: Metadata = {
   title: "Todo App By Lolorn",
@@ -13,9 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-slate-200">
+      <body className="bg-slate-200 dark:bg-black">
         <main className="h-screen">
-          <ThemeMode>{children}</ThemeMode>
+          <QueryMode>
+            <ThemeMode>{children}</ThemeMode>
+          </QueryMode>
+          <Drawer />
         </main>
       </body>
     </html>

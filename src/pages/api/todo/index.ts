@@ -1,9 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { createTodo, deleteTodo, updateTodo } from "../../../../prisma/todo";
+import {
+  createTodo,
+  deleteTodo,
+  findTodo,
+  updateTodo,
+} from "../../../../prisma/todo";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  
   const { id } = req.query;
   const {
     title,
@@ -14,6 +20,7 @@ export default async function handler(
     important,
     status,
     isDone,
+    configs,
   } = req.body;
   try {
     switch (req.method) {
@@ -44,6 +51,11 @@ export default async function handler(
       case "DELETE": {
         const deletedTodo = await deleteTodo(id as string);
         return res.status(201).json(deletedTodo);
+      }
+      case "GET": {
+        const todos = await findTodo();
+        
+        return res.status(201).json(todos);
       }
       default: {
         return res.status(405).json({ error: "未知方法" });

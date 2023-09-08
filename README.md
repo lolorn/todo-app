@@ -1,6 +1,6 @@
 ## 开始
 
-NextJs项目
+NextJs Prisma Mysql 全栈App
 
 ```bash
 yarn install
@@ -8,7 +8,7 @@ yarn install
 
 ## 后端
 
-NextJs Api Routes
+使用NextJs Api Routes
 
 ### Prisma
 
@@ -23,7 +23,9 @@ NextJs Api Routes
     yarn prisma generate
 ```
 ## 前端
-基础样式 Tailwindcss
-主题切换 next-themes
-icon iconify
-状态管理库 zustand
+基础样式 Tailwindcss   
+主题切换 next-themes   
+icon iconify   
+状态管理库 zustand   
+动画 framer-motion   
+数据请求 @tanstack/react-query    
