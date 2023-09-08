@@ -122,3 +122,8 @@ export const deleteCategory = async (id: string) => {
     }
   }
 };
+
+export const findCategory = async () => {
+  const categories = await prisma.category.findMany();
+  return { status: "success", message: "这是所有分类", categories };
+};

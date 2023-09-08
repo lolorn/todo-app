@@ -19,8 +19,8 @@ export default function RootLayout({
         <main className="h-screen">
           <QueryMode>
             <ThemeMode>{children}</ThemeMode>
+            <Drawer />
           </QueryMode>
-          <Drawer />
         </main>
       </body>
     </html>

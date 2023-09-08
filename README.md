@@ -1,6 +1,6 @@
 ## 开始
 
-NextJs Prisma Mysql 全栈App
+NextJs Prisma Mysql 全栈App zod(数据验证)
 
 ```bash
 yarn install
@@ -28,4 +28,5 @@ yarn install
 icon iconify   
 状态管理库 zustand   
 动画 framer-motion   
-数据请求 @tanstack/react-query    
+数据请求 @tanstack/react-query
+表单 react-hook-from  @hookform/resolvers

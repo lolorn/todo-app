@@ -29,6 +29,8 @@ export const createTodo = async (
   }
 
   try {
+    const _categoryId = todoSchema.shape.categoryId.parse(Number(categoryId));
+
     const defaultCategoryExit = await prisma.category.findUnique({
       where: {
         id: defaultCategoryId,
@@ -42,7 +44,7 @@ export const createTodo = async (
           description,
           endTime,
           reminder,
-          categoryId: categoryId || defaultCategoryId,
+          categoryId: _categoryId || defaultCategoryId,
           important,
         },
       });

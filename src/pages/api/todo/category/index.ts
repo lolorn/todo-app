@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import {
   createCategory,
   deleteCategory,
+  findCategory,
   updateCategory,
 } from "../../../../../prisma/category";
 
@@ -14,7 +15,7 @@ export default async function handler(
   try {
     switch (req.method) {
       case "POST": {
-        const newCategory = await createCategory(name,description);
+        const newCategory = await createCategory(name, description);
         return res.status(201).json(newCategory);
       }
 
@@ -29,6 +30,10 @@ export default async function handler(
       case "DELETE": {
         const deletedCategory = await deleteCategory(id as string);
         return res.status(201).json(deletedCategory);
+      }
+      case "GET": {
+        const categories = await findCategory();
+        return res.status(201).json(categories);
       }
       default:
         return res.status(405).json({ error: "未知方法" });
