@@ -11,6 +11,7 @@ function HomePage() {
   const { data: allTodos } = useQuery({
     queryFn: () => getAllTodoApi(),
     queryKey: ["getAllTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const { data: doneTodos } = useQuery({
@@ -21,6 +22,7 @@ function HomePage() {
         },
       }),
     queryKey: ["getDoneTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const { data: notDoneTodos } = useQuery({
@@ -31,6 +33,7 @@ function HomePage() {
         },
       }),
     queryKey: ["getNotDoneTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const { data: importantTodos } = useQuery({
@@ -41,6 +44,7 @@ function HomePage() {
         },
       }),
     queryKey: ["getImportantTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const data = [
@@ -115,9 +119,10 @@ function HomePage() {
                 top: 80,
                 left: 16,
                 width: "calc(100vw - 2rem)",
+                height: "calc(100vh - 10rem)",
               }}
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "66vh", opacity: 1 }}
+              animate={{ height: "calc(100vh - 10rem)", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ type: "tween" }}
               layoutId={selectedId}
@@ -135,7 +140,7 @@ function HomePage() {
                     setSelectedId(() => 0);
                   }}
                 >
-                  <Icon icon="carbon:close-filled" className="text-2xl" />
+                  <Icon icon="carbon:close-filled" className="text-2xl text-red-500" />
                 </motion.button>
               </motion.div>
               <motion.div className="flex-1 pt-4">
