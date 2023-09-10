@@ -46,7 +46,7 @@ const useDrawerStore = create<DrawerState & DrawerActions>((set) => ({
   },
 }));
 
-type NewTaskState = {
+/* type NewTaskState = {
   taskTitle: string;
   description: string;
   endTime: Date | null;
@@ -114,6 +114,6 @@ const useNewTaskStore = create<NewTaskState & NewTaskActions>((set) => ({
       };
     });
   },
-}));
+})); */
 
-export { useDrawerStore, useNewTaskStore };
+export { useDrawerStore };

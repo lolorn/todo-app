@@ -86,7 +86,7 @@ function HomePage() {
       {data.map((item) => (
         <motion.div
           key={item.id}
-          layoutId={item.id}
+          // layoutId={item.id.toString()}
           onClick={() => setSelectedId(() => item.id)}
           whileTap={{ scale: 1.1, transition: { type: "spring" } }}
           className=" rounded-2xl bg-white dark:bg-neutral-800  p-4 flex flex-col justify-between shadow-md"
@@ -124,8 +124,8 @@ function HomePage() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "calc(100vh - 10rem)", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ type: "tween" }}
-              layoutId={selectedId}
+              // transition={{ type: "spring" }}
+              layoutId={selectedId.toString()}
               className="bg-white dark:bg-neutral-800 shadow-md fixed z-50 rounded-2xl p-4 flex flex-col"
               onClick={(e) => {
                 e.stopPropagation();
@@ -143,7 +143,7 @@ function HomePage() {
                   <Icon icon="carbon:close-filled" className="text-2xl text-red-500" />
                 </motion.button>
               </motion.div>
-              <motion.div className="flex-1 pt-4">
+              <motion.div className="flex-1 pt-4 overflow-y-scroll">
                 {(() => {
                   switch (selectedId) {
                     case 1:

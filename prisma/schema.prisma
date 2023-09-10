@@ -32,7 +32,7 @@ model Todo {
   isDone      Boolean    @default(false)
   endTime     DateTime?
   reminder    DateTime?
-  important   Boolean    @default(false)
+  important   Boolean
   categoryId  Int
   category    Category   @relation(fields: [categoryId], references: [id])
   createdAt   DateTime   @default(now())

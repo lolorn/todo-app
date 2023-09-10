@@ -31,6 +31,8 @@ export const createTodo = async (
   try {
     const _categoryId = todoSchema.shape.categoryId.parse(Number(categoryId));
 
+    const _important = todoSchema.shape.important.parse(important);
+
     const defaultCategoryExit = await prisma.category.findUnique({
       where: {
         id: defaultCategoryId,
@@ -45,7 +47,7 @@ export const createTodo = async (
           endTime,
           reminder,
           categoryId: _categoryId || defaultCategoryId,
-          important,
+          important: _important,
         },
       });
       return { message: "创建任务成功", status: "success", newTodo };
@@ -63,6 +65,7 @@ export const createTodo = async (
           endTime,
           reminder,
           categoryId: categoryId || defaultCategoryId,
+          important: _important,
         },
       });
       return {

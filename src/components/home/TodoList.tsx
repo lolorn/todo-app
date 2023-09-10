@@ -1,6 +1,6 @@
 function TodoList({ todos }: { todos: Array<{ id: number; title: string }> }) {
   return (
-    <div className="overflow-y-scroll h-full">
+    <div className="h-full">
       {todos.length === 0 ? (
         <div className="text-center">这里什么也没有!</div>
       ) : (
