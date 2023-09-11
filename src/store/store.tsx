@@ -46,6 +46,55 @@ const useDrawerStore = create<DrawerState & DrawerActions>((set) => ({
   },
 }));
 
+type NoticeState = {
+  noticeStatus: boolean;
+  noticeOptions: {
+    mes: string;
+    confirmBtn: boolean;
+    confirmStatus: boolean | null;
+    autoClose: boolean;
+    autoCloseTime: number;
+  };
+};
+
+type NoticeActions = {
+  toggleNotice: () => void;
+  setNoticeOptions: (options: {
+    mes: string;
+    confirmBtn?: boolean;
+    confirmStatus?: boolean | null;
+    autoClose?: boolean;
+    autoCloseTime?: number;
+  }) => void;
+  showNotice: () => void;
+  closeNotice: () => void;
+};
+
+const useNoticeStore = create<NoticeState & NoticeActions>((set) => ({
+  noticeStatus: false,
+  noticeOptions: {
+    mes: "",
+    confirmBtn: false,
+    confirmStatus: null,
+    autoClose: true,
+    autoCloseTime: 3000,
+  },
+  toggleNotice: () => set((state) => ({ noticeStatus: !state.noticeStatus })),
+  setNoticeOptions: (options) => {
+    return set((state) => {
+      return {
+        noticeOptions: {
+          ...state.noticeOptions,
+          ...options,
+          //这里options必须在state.noticeOptions后面展开 因为后面会覆盖前面的!
+        },
+      };
+    });
+  },
+  showNotice: () => set(() => ({ noticeStatus: true })),
+  closeNotice: () => set(() => ({ noticeStatus: false })),
+}));
+
 /* type NewTaskState = {
   taskTitle: string;
   description: string;
@@ -116,4 +165,4 @@ const useNewTaskStore = create<NewTaskState & NewTaskActions>((set) => ({
   },
 })); */
 
-export { useDrawerStore };
+export { useDrawerStore, useNoticeStore };

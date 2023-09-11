@@ -10,6 +10,7 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import "react-datetime/css/react-datetime.css";
 import "moment/locale/zh-cn";
+import { useNoticeStore } from "@/store/store";
 
 function AddTask() {
   const queryClient = useQueryClient();
@@ -21,12 +22,22 @@ function AddTask() {
     refetchOnWindowFocus: false,
   });
 
+  const { showNotice, setNoticeOptions } = useNoticeStore((state) => state);
+
   const mutation = useMutation({
     mutationFn: (params) => {
       // console.log(params);
       return createTodoApi(params)
         .then((res) => {
           console.log(res);
+          if (res.data.status === "success") {
+            setNoticeOptions({ mes: res.data.message });
+            showNotice();
+          }
+          if (res.data.status === "failed") {
+            setNoticeOptions({ mes: res.data.message });
+            showNotice();
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -255,6 +266,14 @@ function AddTask() {
       <button className="mx-4 p-2 text-sky-500 bg-white dark:bg-neutral-700 rounded-lg disabled:text-slate-500">
         确认
       </button>
+      <div
+        onClick={() => {
+          setNoticeOptions({ mes: "你干嘛" });
+          showNotice();
+        }}
+      >
+        通知
+      </div>
     </form>
   );
 }

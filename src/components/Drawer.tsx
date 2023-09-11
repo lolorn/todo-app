@@ -25,7 +25,7 @@ function Drawer() {
           <motion.div
             animate={visible ? "open" : "closed"}
             variants={variantsMask}
-            className="fixed z-40 w-full h-screen top-0 left-0 flex items-end backdrop-blur-[2px] backdrop-brightness-75"
+            className="fixed z-30 w-full h-screen top-0 left-0 flex items-end backdrop-blur-[2px] backdrop-brightness-75"
             onClick={() => {
               setDrawerStatus(false);
             }}
@@ -35,7 +35,7 @@ function Drawer() {
               variants={variantsDrawer}
               exit={{ height: 0 }}
               className={
-                "bg-white dark:bg-neutral-900 absolute z-50 left-0 right-0 rounded-t-2xl"
+                "bg-white dark:bg-neutral-900 absolute z-40 left-0 right-0 rounded-t-2xl"
               }
               onClick={(e) => e.stopPropagation()}
             >

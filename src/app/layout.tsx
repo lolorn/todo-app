@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Drawer from "@/components/Drawer";
 import QueryMode from "@/components/QueryMode";
+import Notice from "@/components/Notice";
 
 export const metadata: Metadata = {
   title: "Todo App By Lolorn",
@@ -20,6 +21,7 @@ export default function RootLayout({
           <QueryMode>
             <ThemeMode>{children}</ThemeMode>
             <Drawer />
+            <Notice />
           </QueryMode>
         </main>
       </body>
