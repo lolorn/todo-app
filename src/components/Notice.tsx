@@ -29,7 +29,7 @@ function Notice() {
           drag="x"
           dragConstraints={{ left: 0, right: window.innerWidth }}
           dragElastic={0.2}
-          className="fixed w-[90%] z-40 left-[5%] top-4 p-4 rounded-lg bg-white dark:bg-black shadow-md"
+          className="fixed w-[90%] z-40 left-[5%] top-4 p-4 rounded-lg bg-white dark:bg-neutral-800 shadow-md"
         >
           <div className="flex items-center">
             <div className="flex gap-2 items-center p-1">

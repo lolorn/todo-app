@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react";
 import { useDrawerStore } from "@/store/store";
 import AddTask from "../AddTask";
-
+import AddCategory from "../AddCategory";
 function HomeBar() {
   const toggle = useDrawerStore((state) => state.toggleDrawerStatus);
   const changeContent = useDrawerStore((state) => state.changeContent);
@@ -13,7 +13,7 @@ function HomeBar() {
         <button
           onClick={() => {
             changeContent(<AddTask />);
-            changeTitle("添加任务")
+            changeTitle("添加任务");
             toggle();
           }}
           className="flex items-center gap-2"
@@ -23,7 +23,15 @@ function HomeBar() {
         </button>
       </div>
       <div className="text-indigo-500 font-medium">
-        <button>添加列表</button>
+        <button
+          onClick={() => {
+            changeContent(<AddCategory />);
+            changeTitle("添加列表");
+            toggle();
+          }}
+        >
+          添加列表
+        </button>
       </div>
     </div>
   );

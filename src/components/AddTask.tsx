@@ -10,7 +10,8 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import "react-datetime/css/react-datetime.css";
 import "moment/locale/zh-cn";
-import { useNoticeStore } from "@/store/store";
+import { useNoticeStore, useDrawerStore } from "@/store/store";
+import AddCategory from "./AddCategory";
 
 function AddTask() {
   const queryClient = useQueryClient();
@@ -21,6 +22,9 @@ function AddTask() {
     queryKey: ["getAllCategory"],
     refetchOnWindowFocus: false,
   });
+
+  const changeContent = useDrawerStore((state) => state.changeContent);
+  const changeTitle = useDrawerStore((state) => state.changeTitle);
 
   const { showNotice, setNoticeOptions } = useNoticeStore((state) => state);
 
@@ -186,7 +190,13 @@ function AddTask() {
             </div>
           )}
         />
-        <div className="flex-1 flex items-end justify-end">
+        <div
+          className="flex-1 flex items-end justify-end"
+          onClick={() => {
+            changeContent(<AddCategory />);
+            changeTitle("添加列表");
+          }}
+        >
           <Icon icon="basil:add-solid" className="text-2xl text-green-500" />
         </div>
       </div>

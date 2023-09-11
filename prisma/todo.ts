@@ -29,10 +29,6 @@ export const createTodo = async (
   }
 
   try {
-    const _categoryId = todoSchema.shape.categoryId.parse(Number(categoryId));
-
-    const _important = todoSchema.shape.important.parse(important);
-
     const defaultCategoryExit = await prisma.category.findUnique({
       where: {
         id: defaultCategoryId,
@@ -40,6 +36,9 @@ export const createTodo = async (
     });
 
     if (defaultCategoryExit) {
+      const _important = todoSchema.shape.important.parse(important);
+      const _categoryId = todoSchema.shape.categoryId.parse(Number(categoryId));
+
       const newTodo = await prisma.todo.create({
         data: {
           title,
@@ -52,11 +51,18 @@ export const createTodo = async (
       });
       return { message: "创建任务成功", status: "success", newTodo };
     } else {
-      const createdDefaultCategory = await prisma.category.create({
-        data: {
-          id: defaultCategoryId,
-          name: defaultCategoryName,
-        },
+      const _important = todoSchema.shape.important.parse(important);
+      const createdDefaultCategory = await prisma.category.createMany({
+        data: [
+          {
+            id: defaultCategoryId,
+            name: defaultCategoryName,
+          },
+          {
+            id: 2,
+            name: "我的一天",
+          },
+        ],
       });
       const newTodo = await prisma.todo.create({
         data: {
@@ -96,8 +102,8 @@ export const updateTodo = async (
   isDone?: boolean,
   endTime?: Date,
   reminder?: Date,
-  important?: boolean,
-  status?: string
+  important?: boolean
+  // status?: string
 ) => {
   try {
     const updateData: {
@@ -108,7 +114,7 @@ export const updateTodo = async (
       endTime?: Date;
       reminder?: Date;
       important?: boolean;
-      status?: string;
+      // status?: string;
     } = {};
     if (id === undefined) {
       return { status: "failed", message: "id没有传递" };
@@ -154,10 +160,10 @@ export const updateTodo = async (
       updateData.important = verifiedImportant;
     }
 
-    if (status !== undefined) {
+    /* if (status !== undefined) {
       const verifiedStatus = todoSchema.shape.status.parse(status);
       updateData.status = verifiedStatus;
-    }
+    } */
 
     const isExit = await prisma.todo.findUnique({
       where: {

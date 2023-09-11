@@ -2,7 +2,7 @@
 import { Icon } from "@iconify/react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getTodoByConfigsApi } from "@/api/getTodo";
-import { putIsDone } from "@/api/putTodo";
+import { putTodoApi } from "@/api/putTodo";
 function MyDayCard() {
   const queryClient = useQueryClient();
   const { data: todayTaskCount, isLoading } = useQuery({
@@ -16,7 +16,7 @@ function MyDayCard() {
     refetchOnWindowFocus: false,
   });
   const mutation = useMutation({
-    mutationFn: putIsDone,
+    mutationFn: putTodoApi,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["getTodayAllTodos"],
