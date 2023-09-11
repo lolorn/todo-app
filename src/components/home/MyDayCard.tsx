@@ -27,6 +27,12 @@ function MyDayCard() {
       queryClient.invalidateQueries({
         queryKey: ["getNotDoneTodos"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["getAllTodos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getImportantTodos"],
+      });
     },
   });
   return (

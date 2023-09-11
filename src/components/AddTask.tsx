@@ -2,17 +2,53 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Icon } from "@iconify/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getAllCategoryApi } from "@/api/getCategory";
 import { useEffect } from "react";
 import { createTodoApi } from "@/api/getTodo";
+import Datetime from "react-datetime";
+import moment from "moment";
+import "react-datetime/css/react-datetime.css";
+import "moment/locale/zh-cn";
 
 function AddTask() {
+  const queryClient = useQueryClient();
   const { data: allCategory } = useQuery({
     queryFn: () => {
       return getAllCategoryApi();
     },
     queryKey: ["getAllCategory"],
+    refetchOnWindowFocus: false,
+  });
+
+  const mutation = useMutation({
+    mutationFn: (params) => {
+      // console.log(params);
+      return createTodoApi(params)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getTodayAllTodos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getDoneTodos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getNotDoneTodos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getAllTodos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getImportantTodos"],
+      });
+    },
   });
 
   const schema = z.object({
@@ -20,8 +56,8 @@ function AddTask() {
     description: z.string().nullable(),
     categoryId: z.string(),
     important: z.boolean(),
-    endTime: z.string().nullable(),
-    reminder: z.string().nullable(),
+    endTime: z.date().nullable(),
+    reminder: z.date().nullable(),
   });
 
   const {
@@ -46,13 +82,7 @@ function AddTask() {
 
   const onSubmit = (data: any) => {
     console.log(data);
-    createTodoApi(data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((errors) => {
-        console.log(errors);
-      });
+    mutation.mutate(data);
   };
 
   useEffect(() => {
@@ -149,21 +179,76 @@ function AddTask() {
           <Icon icon="basil:add-solid" className="text-2xl text-green-500" />
         </div>
       </div>
-      <div className="mx-4 p-2 bg-white dark:bg-neutral-700 rounded-lg flex flex-col gap-2">
-        <div className="flex gap-2">
-          <div className="flex-1">结束时间</div>
-          <div className="flex-1">提醒</div>
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="date"
-            {...register("endTime")}
-            className="flex-1 p-1 bg-red-100  rounded-md"
+      <div className="mx-4 p-2 bg-white dark:bg-neutral-700 rounded-lg flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Icon icon="gala:clock" className="text-2xl text-teal-500" />
+            <span>提醒</span>
+          </div>
+          <div className="h-[1px] bg-neutral-200 dark:bg-neutral-700"></div>
+          <Controller
+            name="reminder"
+            control={control}
+            render={({ field }) => (
+              <div className="flex items-center justify-between">
+                <Datetime
+                  onChange={(data) => field.onChange(data._d)}
+                  inputProps={{
+                    name: "reminder",
+                    autoComplete: "off",
+                    type: "button",
+                    className:
+                      "bg-emerald-500 p-1 rounded-md text-white text-sm",
+                    value: "选择提醒时间",
+                  }}
+                />
+                {(() => {
+                  if (JSON.stringify(field.value) === "null") {
+                    return "";
+                  } else {
+                    const formattedDate = moment(field.value).format("llll");
+                    return <>{formattedDate}</>;
+                  }
+                })()}
+              </div>
+            )}
           />
-          <input
-            type="date"
-            {...register("reminder")}
-            className="flex-1 p-1 bg-orange-100  rounded-md"
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Icon icon="tabler:clock-x" className="text-2xl text-rose-500" />
+            <span>截止</span>
+          </div>
+          <div className="h-[1px] bg-neutral-200 dark:bg-neutral-700"></div>
+          <Controller
+            name="endTime"
+            control={control}
+            render={({ field }) => {
+              return (
+                <div className="flex items-center justify-between">
+                  <Datetime
+                    onChange={(data) => {
+                      field.onChange(data._d);
+                    }}
+                    inputProps={{
+                      name: "endTime",
+                      autoComplete: "off",
+                      type: "button",
+                      className: "bg-red-500 p-1 rounded-md text-white text-sm",
+                      value: "选择截止时间",
+                    }}
+                  />
+                  {(() => {
+                    if (JSON.stringify(field.value) === "null") {
+                      return "";
+                    } else {
+                      const formattedDate = moment(field.value).format("llll");
+                      return <>{formattedDate}</>;
+                    }
+                  })()}
+                </div>
+              );
+            }}
           />
         </div>
       </div>
