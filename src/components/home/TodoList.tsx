@@ -3,6 +3,7 @@ import { useState } from "react";
 import moment from "moment";
 import { deleteTodoApi } from "@/api/putTodo";
 import { useNoticeStore } from "@/store/store";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 function TodoList({
   todos,
 }: {
@@ -16,7 +17,42 @@ function TodoList({
     isDone: boolean;
     description: string | null;
   }>;
+
+  /* .then((res) => {
+    console.log(res);
+    if (res.data.status === "success") {
+      setNoticeOptions({ mes: res.data.message });
+      showNotice();
+    }
+    if (res.data.status === "failed") {
+      setNoticeOptions({ mes: res.data.message });
+      showNotice();
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+  }); */
 }) {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: deleteTodoApi,
+    onSuccess: (res) => {
+      if (res.data.status === "success") {
+        setNoticeOptions({ mes: res.data.message });
+        showNotice();
+      }
+      if (res.data.status === "failed") {
+        setNoticeOptions({ mes: res.data.message });
+        showNotice();
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["getAllTodos"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getTodayAllTodos"],
+      });
+    },
+  });
   const [open, setOpen] = useState<number | null>(null);
   const { showNotice, setNoticeOptions } = useNoticeStore((state) => state);
   return (
@@ -76,21 +112,7 @@ function TodoList({
                     icon="material-symbols:delete"
                     className="text-2xl text-red-500"
                     onClick={() => {
-                      deleteTodoApi(todo.id)
-                        .then((res) => {
-                          console.log(res);
-                          if (res.data.status === "success") {
-                            setNoticeOptions({ mes: res.data.message });
-                            showNotice();
-                          }
-                          if (res.data.status === "failed") {
-                            setNoticeOptions({ mes: res.data.message });
-                            showNotice();
-                          }
-                        })
-                        .catch((error) => {
-                          console.log(error);
-                        });
+                      mutation.mutate(todo.id);
                     }}
                   />
                 </div>

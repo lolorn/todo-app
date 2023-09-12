@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getTodoByConfigsApi } from "@/api/getTodo";
 import { putTodoApi } from "@/api/putTodo";
+import { useNoticeStore } from "@/store/store";
 function MyDayCard() {
   const queryClient = useQueryClient();
   const { data: todayTaskCount, isLoading } = useQuery({
@@ -15,24 +16,29 @@ function MyDayCard() {
     queryKey: ["getTodayAllTodos"],
     refetchOnWindowFocus: false,
   });
+  const { showNotice, setNoticeOptions } = useNoticeStore((state) => state);
   const mutation = useMutation({
     mutationFn: putTodoApi,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      if (res.data.status === "success") {
+        setNoticeOptions({ mes: res.data.message });
+        showNotice();
+      }
       queryClient.invalidateQueries({
         queryKey: ["getTodayAllTodos"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["getAllTodos"],
+      });
+      /* queryClient.invalidateQueries({
         queryKey: ["getDoneTodos"],
       });
       queryClient.invalidateQueries({
         queryKey: ["getNotDoneTodos"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["getAllTodos"],
-      });
-      queryClient.invalidateQueries({
         queryKey: ["getImportantTodos"],
-      });
+      }); */
     },
   });
   return (

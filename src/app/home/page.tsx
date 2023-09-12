@@ -6,6 +6,7 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import TodoList from "@/components/home/TodoList";
+import { boolean } from "zod";
 //!网格布局有问题哦
 function HomePage() {
   const { data: allTodos } = useQuery({
@@ -14,7 +15,7 @@ function HomePage() {
     refetchOnWindowFocus: false,
   });
 
-  const { data: doneTodos } = useQuery({
+  /* const { data: doneTodos } = useQuery({
     queryFn: () =>
       getTodoByConfigsApi({
         where: {
@@ -45,7 +46,7 @@ function HomePage() {
       }),
     queryKey: ["getImportantTodos"],
     refetchOnWindowFocus: false,
-  });
+  }); */
 
   const data = [
     {
@@ -60,21 +61,27 @@ function HomePage() {
       icon: "ph:star-bold",
       title: "重要",
       iconBg: "bg-amber-500",
-      count: importantTodos?.data.todos.length,
+      count: allTodos?.data.todos.filter(
+        (item: { important: boolean }) => item.important
+      ).length,
     },
     {
       id: 3,
       icon: "mingcute:check-fill",
       title: "已完成",
       iconBg: "bg-emerald-500",
-      count: doneTodos?.data.todos.length,
+      count: allTodos?.data.todos.filter(
+        (item: { isDone: boolean }) => item.isDone
+      ).length,
     },
     {
       id: 4,
       icon: "maki:cross",
       title: "未完成",
       iconBg: "bg-red-500",
-      count: notDoneTodos?.data.todos.length,
+      count: allTodos?.data.todos.filter(
+        (item: { isDone: boolean }) => !item.isDone
+      ).length,
     },
   ];
 
@@ -140,7 +147,10 @@ function HomePage() {
                     setSelectedId(() => 0);
                   }}
                 >
-                  <Icon icon="carbon:close-filled" className="text-2xl text-red-500" />
+                  <Icon
+                    icon="carbon:close-filled"
+                    className="text-2xl text-red-500"
+                  />
                 </motion.button>
               </motion.div>
               <motion.div className="flex-1 pt-4 overflow-y-scroll">
@@ -149,11 +159,29 @@ function HomePage() {
                     case 1:
                       return <TodoList todos={allTodos?.data.todos} />;
                     case 2:
-                      return <TodoList todos={importantTodos?.data.todos} />;
+                      return (
+                        <TodoList
+                          todos={allTodos?.data.todos.filter(
+                            (item: { important: boolean }) => item.important
+                          )}
+                        />
+                      );
                     case 3:
-                      return <TodoList todos={doneTodos?.data.todos} />;
+                      return (
+                        <TodoList
+                          todos={allTodos?.data.todos.filter(
+                            (item: { isDone: boolean }) => item.isDone
+                          )}
+                        />
+                      );
                     case 4:
-                      return <TodoList todos={notDoneTodos?.data.todos} />;
+                      return (
+                        <TodoList
+                          todos={allTodos?.data.todos.filter(
+                            (item: { isDone: boolean }) => !item.isDone
+                          )}
+                        />
+                      );
                     default:
                       return null;
                   }

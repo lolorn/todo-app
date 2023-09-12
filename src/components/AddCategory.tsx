@@ -70,10 +70,10 @@ function AddCategory() {
       onSubmit={handleSubmit(onSubmit)}
       className="h-full p-4 flex flex-col gap-4 bg-slate-100 dark:bg-neutral-800"
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center flex-wrap gap-4">
         {allCategory?.data.categories.map((item: any) => (
           <div
-            className="p-1 rounded-md bg-sky-500 flex items-center gap-2"
+            className="p-1 rounded-md bg-sky-500 text-white flex items-center gap-2 shrink-0"
             key={item.id}
           >
             {item.name}
