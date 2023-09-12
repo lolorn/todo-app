@@ -1,7 +1,10 @@
 import prisma from "@/lib/prisma";
-import { ZodError, string, z } from "zod";
+import { ZodError, z } from "zod";
 
-export const createCategory = async (name: string, description: string) => {
+export const createCategory = async (
+  name: string,
+  description?: string | null
+) => {
   try {
     if (name === undefined) {
       return { status: "failed", message: "创建分类失败 没有分类名" };
@@ -19,6 +22,7 @@ export const createCategory = async (name: string, description: string) => {
       const newCategory = await prisma.category.create({
         data: {
           name,
+          description: description ? description : null,
         },
       });
       return { status: "success", message: "创建分类成功", newCategory };
@@ -121,4 +125,9 @@ export const deleteCategory = async (id: string) => {
       return { status: "failed", message: "删除分类失败", error };
     }
   }
+};
+
+export const findCategory = async () => {
+  const categories = await prisma.category.findMany();
+  return { status: "success", message: "这是所有分类", categories };
 };

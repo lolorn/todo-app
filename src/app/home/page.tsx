@@ -11,6 +11,7 @@ function HomePage() {
   const { data: allTodos } = useQuery({
     queryFn: () => getAllTodoApi(),
     queryKey: ["getAllTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const { data: doneTodos } = useQuery({
@@ -21,6 +22,7 @@ function HomePage() {
         },
       }),
     queryKey: ["getDoneTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const { data: notDoneTodos } = useQuery({
@@ -31,6 +33,7 @@ function HomePage() {
         },
       }),
     queryKey: ["getNotDoneTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const { data: importantTodos } = useQuery({
@@ -41,6 +44,7 @@ function HomePage() {
         },
       }),
     queryKey: ["getImportantTodos"],
+    refetchOnWindowFocus: false,
   });
 
   const data = [
@@ -82,7 +86,7 @@ function HomePage() {
       {data.map((item) => (
         <motion.div
           key={item.id}
-          layoutId={item.id}
+          // layoutId={item.id.toString()}
           onClick={() => setSelectedId(() => item.id)}
           whileTap={{ scale: 1.1, transition: { type: "spring" } }}
           className=" rounded-2xl bg-white dark:bg-neutral-800  p-4 flex flex-col justify-between shadow-md"
@@ -115,12 +119,13 @@ function HomePage() {
                 top: 80,
                 left: 16,
                 width: "calc(100vw - 2rem)",
+                height: "calc(100vh - 10rem)",
               }}
               initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "66vh", opacity: 1 }}
+              animate={{ height: "calc(100vh - 10rem)", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ type: "tween" }}
-              layoutId={selectedId}
+              // transition={{ type: "spring" }}
+              layoutId={selectedId.toString()}
               className="bg-white dark:bg-neutral-800 shadow-md fixed z-50 rounded-2xl p-4 flex flex-col"
               onClick={(e) => {
                 e.stopPropagation();
@@ -135,10 +140,10 @@ function HomePage() {
                     setSelectedId(() => 0);
                   }}
                 >
-                  <Icon icon="carbon:close-filled" className="text-2xl" />
+                  <Icon icon="carbon:close-filled" className="text-2xl text-red-500" />
                 </motion.button>
               </motion.div>
-              <motion.div className="flex-1 pt-4">
+              <motion.div className="flex-1 pt-4 overflow-y-scroll">
                 {(() => {
                   switch (selectedId) {
                     case 1:

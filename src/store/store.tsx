@@ -1,36 +1,21 @@
 import { create } from "zustand";
-import Image from "next/image";
-type State = {
+type DrawerState = {
   drawerStatus: boolean;
   content: JSX.Element;
+  title: string;
 };
 
-type Actions = {
+type DrawerActions = {
   toggleDrawerStatus: () => void;
   setDrawerStatus: (status: boolean) => void;
   changeContent: (ele: JSX.Element) => void;
+  changeTitle: (title: string) => void;
 };
 
-const useDrawerStore = create<State & Actions>((set) => ({
+const useDrawerStore = create<DrawerState & DrawerActions>((set) => ({
   drawerStatus: false,
-  content: (
-    <div className="h-full py-4 flex flex-col items-center gap-0.5 bg-slate-100  dark:bg-neutral-800">
-      <Image src={""} alt={""} className="h-20 w-20 rounded-full" />
-      <div className="flex flex-col items-center">
-        <div className="text-2xl">Lolorn</div>
-        <div className="text-sm text-slate-500">wangenzhao.adore@gmail.com</div>
-      </div>
-      <div className="text-blue-500 bg-slate-200  p-4 w-full flex justify-center">
-        管理账户
-      </div>
-      <div className="text-red-500 bg-slate-200  p-4 w-full flex justify-center">
-        退出登陆
-      </div>
-      <div className="text-red-500 bg-slate-200  p-4 w-full flex justify-center">
-        删除账户
-      </div>
-    </div>
-  ),
+  title: "",
+  content: <></>,
   toggleDrawerStatus: () => {
     return set((state) => {
       return {
@@ -52,6 +37,132 @@ const useDrawerStore = create<State & Actions>((set) => ({
       };
     });
   },
+  changeTitle: (title: string) => {
+    return set(() => {
+      return {
+        title,
+      };
+    });
+  },
 }));
 
-export { useDrawerStore };
+type NoticeState = {
+  noticeStatus: boolean;
+  noticeOptions: {
+    mes: string;
+    confirmBtn: boolean;
+    confirmStatus: boolean | null;
+    autoClose: boolean;
+    autoCloseTime: number;
+  };
+};
+
+type NoticeActions = {
+  toggleNotice: () => void;
+  setNoticeOptions: (options: {
+    mes: string;
+    confirmBtn?: boolean;
+    confirmStatus?: boolean | null;
+    autoClose?: boolean;
+    autoCloseTime?: number;
+  }) => void;
+  showNotice: () => void;
+  closeNotice: () => void;
+};
+
+const useNoticeStore = create<NoticeState & NoticeActions>((set) => ({
+  noticeStatus: false,
+  noticeOptions: {
+    mes: "",
+    confirmBtn: false,
+    confirmStatus: null,
+    autoClose: true,
+    autoCloseTime: 3000,
+  },
+  toggleNotice: () => set((state) => ({ noticeStatus: !state.noticeStatus })),
+  setNoticeOptions: (options) => {
+    return set((state) => {
+      return {
+        noticeOptions: {
+          ...state.noticeOptions,
+          ...options,
+          //这里options必须在state.noticeOptions后面展开 因为后面会覆盖前面的!
+        },
+      };
+    });
+  },
+  showNotice: () => set(() => ({ noticeStatus: true })),
+  closeNotice: () => set(() => ({ noticeStatus: false })),
+}));
+
+/* type NewTaskState = {
+  taskTitle: string;
+  description: string;
+  endTime: Date | null;
+  reminder: Date | null;
+  important: boolean;
+  categoryId: number;
+};
+
+type NewTaskActions = {
+  setTaskTitle: (newTitle: string) => void;
+  setDescription: (newDescription: string) => void;
+  setEndTime: (time: Date) => void;
+  setReminder: (time: Date) => void;
+  setImportant: (status: boolean) => void;
+  setCategoryId: (id: number) => void;
+};
+
+const useNewTaskStore = create<NewTaskState & NewTaskActions>((set) => ({
+  taskTitle: "",
+  description: "",
+  endTime: null,
+  reminder: null,
+  important: false,
+  categoryId: 1,
+  setTaskTitle: (title: string) => {
+    return set(() => {
+      return {
+        taskTitle: title,
+      };
+    });
+  },
+  setDescription: (newDescription: string) => {
+    return set(() => {
+      return {
+        description: newDescription,
+      };
+    });
+  },
+  setEndTime(time) {
+    return set(() => {
+      return {
+        endTime: time,
+      };
+    });
+  },
+  setReminder(time) {
+    return set(() => {
+      return {
+        reminder: time,
+      };
+    });
+  },
+  setImportant(status) {
+    
+    return set(() => {
+      return {
+        important: status,
+      };
+    });
+  },
+  setCategoryId(id) {
+    return set(() => {
+      return {
+        categoryId: id,
+      };
+    });
+  },
+})); */
+
+export { useDrawerStore, useNoticeStore };

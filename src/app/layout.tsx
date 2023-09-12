@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Drawer from "@/components/Drawer";
 import QueryMode from "@/components/QueryMode";
+import Notice from "@/components/Notice";
 
 export const metadata: Metadata = {
   title: "Todo App By Lolorn",
@@ -19,8 +20,9 @@ export default function RootLayout({
         <main className="h-screen">
           <QueryMode>
             <ThemeMode>{children}</ThemeMode>
+            <Drawer />
+            <Notice />
           </QueryMode>
-          <Drawer />
         </main>
       </body>
     </html>

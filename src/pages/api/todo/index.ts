@@ -9,7 +9,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  
   const { id } = req.query;
   const {
     title,
@@ -30,7 +29,8 @@ export default async function handler(
           categoryId,
           description,
           endTime,
-          reminder
+          reminder,
+          important,
         );
         return res.status(201).json(newTodo);
       }
@@ -44,7 +44,6 @@ export default async function handler(
           endTime,
           reminder,
           important,
-          status
         );
         return res.status(201).json(updatedTodo);
       }
@@ -53,8 +52,8 @@ export default async function handler(
         return res.status(201).json(deletedTodo);
       }
       case "GET": {
-        const todos = await findTodo();
-        
+        const todos = await findTodo(configs);
+
         return res.status(201).json(todos);
       }
       default: {
