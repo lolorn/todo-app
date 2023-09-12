@@ -2,51 +2,17 @@
 import { getAllTodoApi, getTodoByConfigsApi } from "@/api/getTodo";
 import MyDayCard from "@/components/home/MyDayCard";
 import { Icon } from "@iconify/react";
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { motion, AnimatePresence, } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import TodoList from "@/components/home/TodoList";
-import { boolean } from "zod";
-//!网格布局有问题哦
+
 function HomePage() {
   const { data: allTodos } = useQuery({
     queryFn: () => getAllTodoApi(),
     queryKey: ["getAllTodos"],
     refetchOnWindowFocus: false,
   });
-
-  /* const { data: doneTodos } = useQuery({
-    queryFn: () =>
-      getTodoByConfigsApi({
-        where: {
-          isDone: true,
-        },
-      }),
-    queryKey: ["getDoneTodos"],
-    refetchOnWindowFocus: false,
-  });
-
-  const { data: notDoneTodos } = useQuery({
-    queryFn: () =>
-      getTodoByConfigsApi({
-        where: {
-          isDone: false,
-        },
-      }),
-    queryKey: ["getNotDoneTodos"],
-    refetchOnWindowFocus: false,
-  });
-
-  const { data: importantTodos } = useQuery({
-    queryFn: () =>
-      getTodoByConfigsApi({
-        where: {
-          important: true,
-        },
-      }),
-    queryKey: ["getImportantTodos"],
-    refetchOnWindowFocus: false,
-  }); */
 
   const data = [
     {
