@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import Cookies from "js-cookie";
+
 type DrawerState = {
   drawerStatus: boolean;
   content: JSX.Element;
@@ -94,75 +96,5 @@ const useNoticeStore = create<NoticeState & NoticeActions>((set) => ({
   showNotice: () => set(() => ({ noticeStatus: true })),
   closeNotice: () => set(() => ({ noticeStatus: false })),
 }));
-
-/* type NewTaskState = {
-  taskTitle: string;
-  description: string;
-  endTime: Date | null;
-  reminder: Date | null;
-  important: boolean;
-  categoryId: number;
-};
-
-type NewTaskActions = {
-  setTaskTitle: (newTitle: string) => void;
-  setDescription: (newDescription: string) => void;
-  setEndTime: (time: Date) => void;
-  setReminder: (time: Date) => void;
-  setImportant: (status: boolean) => void;
-  setCategoryId: (id: number) => void;
-};
-
-const useNewTaskStore = create<NewTaskState & NewTaskActions>((set) => ({
-  taskTitle: "",
-  description: "",
-  endTime: null,
-  reminder: null,
-  important: false,
-  categoryId: 1,
-  setTaskTitle: (title: string) => {
-    return set(() => {
-      return {
-        taskTitle: title,
-      };
-    });
-  },
-  setDescription: (newDescription: string) => {
-    return set(() => {
-      return {
-        description: newDescription,
-      };
-    });
-  },
-  setEndTime(time) {
-    return set(() => {
-      return {
-        endTime: time,
-      };
-    });
-  },
-  setReminder(time) {
-    return set(() => {
-      return {
-        reminder: time,
-      };
-    });
-  },
-  setImportant(status) {
-    
-    return set(() => {
-      return {
-        important: status,
-      };
-    });
-  },
-  setCategoryId(id) {
-    return set(() => {
-      return {
-        categoryId: id,
-      };
-    });
-  },
-})); */
 
 export { useDrawerStore, useNoticeStore };

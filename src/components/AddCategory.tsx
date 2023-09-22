@@ -7,6 +7,8 @@ import { useNoticeStore } from "@/store/store";
 import { createCategoryApi, deleteCategoryApi } from "@/api/createCategory";
 import { useEffect } from "react";
 import { Icon } from "@iconify/react";
+import { useDrawerStore } from "@/store/store";
+import AddTask from "./AddTask";
 
 function AddCategory() {
   const { data: allCategory, refetch } = useQuery({
@@ -36,6 +38,8 @@ function AddCategory() {
   });
 
   const { showNotice, setNoticeOptions } = useNoticeStore((state) => state);
+
+  const { changeContent, changeTitle } = useDrawerStore((state) => state);
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -73,7 +77,7 @@ function AddCategory() {
       <div className="flex items-center flex-wrap gap-4">
         {allCategory?.data.categories.map((item: any) => (
           <div
-            className="p-1 rounded-md bg-sky-500 text-white flex items-center gap-2 shrink-0"
+            className="p-2 rounded-md bg-green-300 dark:bg-slate-700  flex items-center gap-2 shrink-0"
             key={item.id}
           >
             {item.name}
@@ -101,12 +105,22 @@ function AddCategory() {
             />
           </div>
         ))}
+        <div
+          className="flex-1 flex items-center justify-center"
+          onClick={() => {
+            changeContent(<AddTask />);
+            changeTitle("添加任务");
+          }}
+        >
+          <Icon icon="basil:add-solid" className="text-2xl text-sky-500" />
+          添加任务
+        </div>
       </div>
       <input
         type="text"
         className="p-2 outline-none caret-violet-500 rounded-lg"
         {...register("name")}
-        placeholder="输入一个分类名吧"
+        placeholder="输入一个列表名吧"
         autoFocus
         autoComplete="off"
       />
@@ -119,7 +133,7 @@ function AddCategory() {
         type="text"
         className="p-2 outline-none caret-violet-500 rounded-lg"
         {...register("description")}
-        placeholder="分类描述"
+        placeholder="列表描述"
         autoComplete="off"
       />
       <button className="p-2 text-sky-500 bg-white dark:bg-neutral-700 rounded-lg">
