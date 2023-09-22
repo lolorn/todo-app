@@ -2,10 +2,11 @@
 import { getAllTodoApi, getTodoByConfigsApi } from "@/api/getTodo";
 import MyDayCard from "@/components/home/MyDayCard";
 import { Icon } from "@iconify/react";
-import { motion, AnimatePresence, } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import TodoList from "@/components/home/TodoList";
+import withAuth from "@/hoc/withAuth";
 
 function HomePage() {
   const { data: allTodos } = useQuery({
@@ -161,4 +162,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default withAuth(HomePage);

@@ -276,14 +276,6 @@ function AddTask() {
       <button className="mx-4 p-2 text-sky-500 bg-white dark:bg-neutral-700 rounded-lg disabled:text-slate-500">
         确认
       </button>
-      <div
-        onClick={() => {
-          setNoticeOptions({ mes: "你干嘛 哎吆 !" });
-          showNotice();
-        }}
-      >
-        通知
-      </div>
     </form>
   );
 }

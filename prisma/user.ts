@@ -14,12 +14,14 @@ export const createUser = async (
   password: string,
   email: string
 ) => {
+  const jwt = require("jsonwebtoken");
   try {
     const userData = userSchema.parse({ username, password, email });
     const user = await prisma.user.create({
       data: userData,
     });
-    return { message: "创建用户成功", status: "success", data: user };
+    const token = await jwt.sign({ ...user }, process.env.MY_SECRET);
+    return { message: "创建用户成功", status: "success", token };
   } catch (error) {
     if (error instanceof ZodError) {
       return {
@@ -28,7 +30,22 @@ export const createUser = async (
         error: error.errors,
       };
     } else {
-      return { status: "failed", message: "创建用户失败", error };
+      switch (error.meta.target) {
+        case "User_username_key":
+          return {
+            status: "failed",
+            message: "创建用户失败 用户名已经存在",
+            error,
+          };
+        case "User_email_key":
+          return {
+            status: "failed",
+            message: "创建用户失败 邮箱已经存在",
+            error,
+          };
+        default:
+          return { status: "failed", message: "创建用户失败", error };
+      }
     }
   }
 };
@@ -109,17 +126,33 @@ export const deleteUser = async (id: string) => {
   }
 };
 //查找用户
-export const findUser = async (
-  username: string,
-  password: string,
-  email: string
-) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      username,
-      password,
-      email,
-    },
-  });
-  return user;
+export const findUser = async (username: string, password: string) => {
+  try {
+    const _username = userSchema.shape.username.parse(username);
+    const _password = userSchema.shape.password.parse(password);
+    const jwt = require("jsonwebtoken");
+    const user = await prisma.user.findUnique({
+      where: {
+        username: _username,
+        password: _password,
+      },
+    });
+
+    if (user) {
+      const token = await jwt.sign({ ...user }, process.env.MY_SECRET);
+      return { status: "success", message: "登陆成功", token };
+    } else {
+      return { status: "failed", message: "密码或者用户名不正确" };
+    }
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return {
+        status: "failed",
+        message: "查找用户失败,校验不通过",
+        error: error.errors,
+      };
+    } else {
+      return { status: "failed", message: "查找用户失败", error };
+    }
+  }
 };

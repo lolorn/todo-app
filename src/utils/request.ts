@@ -1,5 +1,6 @@
 import axios from "axios";
 const request = axios.create({
+  //! 导入环境变量的话是undefined BASE_URL
   baseURL: "http://localhost:3000/api",
   timeout: 5000,
   headers: {

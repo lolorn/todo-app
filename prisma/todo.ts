@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { ZodError, any, boolean, date, number, string, z } from "zod";
+import { ZodError,  boolean, date, number, string, z } from "zod";
 
 const todoSchema = z.object({
   id: number(),
