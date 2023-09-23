@@ -35,4 +35,4 @@ icon iconify
 数据请求 @tanstack/react-query  
 表单 react-hook-from @hookform/resolvers  
 日期时间 react-datetime moment
-升级到了 Nextjs 13.5
+升级到了 Nextjs 13.5(Prisma环境变量有问题)
